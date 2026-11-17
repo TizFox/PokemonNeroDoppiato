@@ -1,1 +1,1 @@
-BizHawk\EmuHawk.exe --lua="scripts\voice_player.lua" "ROM\PokemonNero.nds"
+BizHawk\EmuHawk.exe --lua="src\main.lua" "ROM\PokemonNero.nds"
