@@ -37,10 +37,19 @@ local CMD_SCROLL = 0xBE00     -- attende tasto + scorre la riga    -> stesso fil
 local NEWLINE    = 0xFFFE
 
 -- Memoria
-local DIALOG_ADDR, DIALOG_WORDS = 0x25AF20, 256  -- dialoghi normali (0 quando il dialogo e' chiuso)
+local DIALOG_ADDR, DIALOG_WORDS = 0x25AF20, 2048  -- dialoghi normali (0 quando il dialogo e' chiuso)
 -- Buffer extra (es. introduzione della Prof.ssa Aralia): non vengono azzerati alla chiusura,
 -- quindi un dialogo nuovo viene riconosciuto solo quando il loro contenuto cambia.
-local EXTRA_DIALOG_ADDRS = { 0x2D6C50, 0x2D7908 }
+local EXTRA_DIALOG_ADDRS = {
+	0x2D6C50, 0x2D7908,   -- introduzione Prof.ssa Aralia
+}
+-- Puntatori a buffer extra: per l'interfono ogni battuta ha un buffer nuovo in un punto diverso,
+-- ma a questo indirizzo c'e' sempre il puntatore (0x02xxxxxx) alla struttura della battuta attuale.
+-- Il marcatore D2EC B6F8 sta 4 byte dopo l'inizio della struttura.
+local EXTRA_DIALOG_PTRS = {
+	0x2696DC,             -- interfono
+}
+local PTR_TO_MAGIC = 4
 local DIALOG_HDR1, DIALOG_HDR2  = 0xD2EC, 0xB6F8
 local NAME_ADDRS = { 0x24F82C, 0x24F6C8 }    -- nome giocatore: gioco / intro
 local NAME_PLACEHOLDER = 0xE001              -- uguale a PLACEHOLDER di extract_script.py
@@ -55,6 +64,7 @@ local voicePlayer  = nil
 local currentHash  = nil
 local currentSrc   = nil     -- "main" o indirizzo del buffer extra da cui viene il dialogo corrente
 local extraSeen    = {}      -- buffer extra -> hash dell'ultimo contenuto gia' visto
+local mainSeen     = nil     -- hash dell'ultimo contenuto visto nel buffer dei dialoghi normali
 local pages        = {}      -- { hash, text, segs = {nChars, ...} }
 local pageIdx      = 0
 local segIdx       = 1       -- segmento della bolla corrente (separati da CMD_SCROLL)
@@ -528,16 +538,34 @@ local function begin_dialog(words, h, src)
 	end
 end
 
--- Il contenuto gia' presente nei buffer extra (es. dopo un caricamento di stato) non va riprodotto
-local function prime_extra()
-	for _, addr in ipairs(EXTRA_DIALOG_ADDRS) do
-		local buf = read_dialog(addr)
-		if type(buf) == "table" and #buf > 0 then
-			local _, h = prepare_dialog(buf)
-			extraSeen[addr] = h
-		else
-			extraSeen[addr] = nil
+-- Buffer extra da controllare in questo frame: indirizzi fissi + quelli indicati dai puntatori
+local function extra_sources()
+	local list = {}
+	for _, a in ipairs(EXTRA_DIALOG_ADDRS) do
+		list[#list + 1] = { key = a, addr = a }
+	end
+	for _, p in ipairs(EXTRA_DIALOG_PTRS) do
+		local v = memory.read_u32_le(p)
+		if v >= 0x02000000 and v < 0x02400000 - 0x400 then
+			list[#list + 1] = { key = "ptr" .. p, addr = v - 0x02000000 + PTR_TO_MAGIC }
 		end
+	end
+	return list
+end
+
+-- Il contenuto gia' presente nei buffer extra (es. dopo un caricamento di stato) non va riprodotto
+local function prime_extra(reason)
+	for _, src in ipairs(extra_sources()) do
+		local addr = src.addr
+		local buf = read_dialog(addr)
+		local h = nil
+		if type(buf) == "table" and #buf > 0 then
+			h = select(2, prepare_dialog(buf))
+		end
+		if DEBUG and reason and h and h ~= extraSeen[src.key] then
+			console.log(string.format("  buffer %06X: testo ignorato (%s): %s", addr, reason, decode(buf):sub(1, 60)))
+		end
+		extraSeen[src.key] = h
 	end
 end
 
@@ -555,44 +583,54 @@ function M.init(ctx)
 	load_voices()
 	load_templates()
 	prime_extra()
+	if DEBUG then
+		console.log("voice_player: buffer extra " .. #EXTRA_DIALOG_ADDRS .. ", puntatori " .. #EXTRA_DIALOG_PTRS)
+	end
 end
 
 function M.update()
 	local pressed = button_just_pressed()
+	local started = false   -- nel frame in cui parte un dialogo la pressione non conta (e' quella che l'ha aperto)
+
+	-- Vince il buffer il cui contenuto e' appena cambiato: durante le chiamate con l'interfono, per esempio,
+	-- il buffer normale resta fermo su "<giocatore> risponde all'Interpoke'." mentre il testo della chiamata
+	-- arriva in un buffer extra.
 
 	-- Dialoghi normali
 	local main = read_dialog(DIALOG_ADDR)
-	if type(main) == "table" then
-		prime_extra()   -- durante i dialoghi normali i buffer extra non contano: si segna il loro contenuto come gia' visto
-		if #main > 0 then
-			local words, h = prepare_dialog(main)
+	if type(main) == "table" and #main > 0 then
+		local words, h = prepare_dialog(main)
+		if h ~= mainSeen then
+			mainSeen = h
 			if h ~= currentHash then
 				begin_dialog(words, h, "main")
-				return
+				started = true
 			end
 		end
-	else
-		if main == "CLOSED" and currentSrc == "main" then
+	elseif main == "CLOSED" then
+		mainSeen = nil
+		if currentSrc == "main" then
 			reset_dialog()
 			return
 		end
-		-- Buffer extra (introduzione): conta solo quando il contenuto cambia
-		for _, addr in ipairs(EXTRA_DIALOG_ADDRS) do
-			local buf = read_dialog(addr)
-			if type(buf) == "table" and #buf > 0 then
-				local words, h = prepare_dialog(buf)
-				if h ~= extraSeen[addr] then
-					extraSeen[addr] = h
-					if h ~= currentHash then
-						begin_dialog(words, h, addr)
-						return
-					end
+	end
+
+	-- Buffer extra (introduzione, interfono): non vengono azzerati, conta solo quando il contenuto cambia
+	for _, src in ipairs(extra_sources()) do
+		local buf = read_dialog(src.addr)
+		if type(buf) == "table" and #buf > 0 then
+			local words, h = prepare_dialog(buf)
+			if h ~= extraSeen[src.key] then
+				extraSeen[src.key] = h
+				if h ~= currentHash then
+					begin_dialog(words, h, src.addr)
+					started = true
 				end
 			end
 		end
 	end
 
-	if pressed and currentHash then
+	if pressed and currentHash and not started then
 		on_press()
 	end
 end
@@ -600,7 +638,8 @@ end
 -- Caricamento di uno stato: si ferma l'audio e il contenuto attuale dei buffer extra conta come gia' visto
 function M.on_loadstate()
 	reset_dialog()
-	prime_extra()
+	mainSeen = nil   -- un dialogo normale gia' aperto nello stato caricato viene riprodotto
+	prime_extra("gia' presente al caricamento dello stato")
 end
 
 function M.on_exit()
