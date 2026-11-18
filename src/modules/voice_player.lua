@@ -37,7 +37,8 @@ local CMD_SCROLL = 0xBE00     -- attende tasto + scorre la riga    -> stesso fil
 local NEWLINE    = 0xFFFE
 
 -- Memoria
-local DIALOG_ADDR, DIALOG_WORDS = 0x25AF20, 2048  -- dialoghi normali (0 quando il dialogo e' chiuso)
+local DIALOG_ADDR  = 0x25AF20   -- dialoghi normali (0 quando il dialogo e' chiuso)
+local DIALOG_WORDS = 2048       -- limite di sicurezza in caratteri: la lettura si ferma comunque a FFFF
 -- Buffer extra (es. introduzione della Prof.ssa Aralia): non vengono azzerati alla chiusura,
 -- quindi un dialogo nuovo viene riconosciuto solo quando il loro contenuto cambia.
 local EXTRA_DIALOG_ADDRS = {
@@ -50,6 +51,15 @@ local EXTRA_DIALOG_PTRS = {
 	0x2696DC,             -- interfono
 }
 local PTR_TO_MAGIC = 4
+
+-- Chi parla nei buffer extra quando la bolla non ha l'etichetta "Nome:" (serve solo per le frasi uguali tra personaggi)
+local SOURCE_SPEAKER = {
+	[0x2D6C50] = "Aralia",
+	[0x2D7908] = "Aralia",
+}
+
+-- Nomi delle etichette in gioco -> nome della cartella (come ALIASES in extractScript.py)
+local ALIASES = { ["Aloè"] = "Aloé", ["Ghechis"] = "Ghecis", ["Silvstro"] = "Silvestro" }
 local DIALOG_HDR1, DIALOG_HDR2  = 0xD2EC, 0xB6F8
 local NAME_ADDRS = { 0x24F82C, 0x24F6C8 }    -- nome giocatore: gioco / intro
 local NAME_PLACEHOLDER = 0xE001              -- uguale a PLACEHOLDER di extract_script.py
@@ -77,14 +87,43 @@ local seenHeaders  = {}
 --------------------------------------------------------------------------------------------------------------------------------
 -- Caricamento file audio
 
-local hashToPath = {}   -- hash pagina -> percorso assoluto .wav
+local hashToPath = {}   -- hash pagina -> percorso .wav (il primo trovato)
+local hashAlts   = {}   -- hash pagina -> { [cartella] = percorso } quando lo stesso hash e' in piu' cartelle
 
-local function add_voice(hash, path)
+-- Chiave di confronto tra nome personaggio e nome cartella (come slug() di extractScript.py, senza maiuscole)
+local function speaker_key(name)
+	if not name then return nil end
+	name = ALIASES[name] or name
+	return (name:gsub("[%s%p]", "_"):lower())
+end
+
+local function add_voice(hash, path, folder)
 	hash = hash:lower()
-	if DEBUG and hashToPath[hash] and hashToPath[hash] ~= path then
-		console.log("ATTENZIONE: hash duplicato " .. hash .. "\n  " .. hashToPath[hash] .. "\n  " .. path)
+	local key = speaker_key(folder) or ""
+	local alts = hashAlts[hash]
+	if not alts then
+		alts = {}
+		hashAlts[hash] = alts
 	end
-	hashToPath[hash] = path
+	if alts[key] and alts[key] ~= path then
+		if DEBUG then
+			console.log("ATTENZIONE: hash duplicato nella stessa cartella " .. hash .. "\n  " .. alts[key] .. "\n  " .. path)
+		end
+	elseif DEBUG and hashToPath[hash] then
+		console.log("Frase condivisa " .. hash .. ": piu' personaggi, si sceglie in base a chi parla (" .. folder .. ")")
+	end
+	alts[key] = path
+	hashToPath[hash] = hashToPath[hash] or path
+end
+
+-- Percorso dell'audio di una bolla: se la frase esiste per piu' personaggi, quello di chi sta parlando
+local function path_for(hash, speaker)
+	local alts = hashAlts[hash]
+	if alts and speaker then
+		local p = alts[speaker_key(speaker)]
+		if p then return p end
+	end
+	return hashToPath[hash]
 end
 
 local function load_voices()
@@ -92,12 +131,16 @@ local function load_voices()
 
 	-- Scansione ricorsiva: voice_lines/<personaggio>/<hash>.wav
 	if Directory.Exists(VOICES) then
+		local root = IOPath.GetFullPath(VOICES)
 		local files = Directory.GetFiles(VOICES, "*.wav", SearchOption.AllDirectories)
 		for i = 0, files.Length - 1 do
-			local full = files[i]
+			local full = IOPath.GetFullPath(files[i])
 			local name = IOPath.GetFileNameWithoutExtension(full)
 			if #name == 16 and name:match("^%x+$") then
-				add_voice(name, IOPath.GetFullPath(full))
+				-- prima cartella sotto voice_lines/ = personaggio
+				local rel = full:sub(#root + 1):gsub("^[/\\]+", "")
+				local folder = rel:match("^([^/\\]+)[/\\]") or ""
+				add_voice(name, full, folder)
 				count = count + 1
 			end
 		end
@@ -339,7 +382,16 @@ local function count_segments(cur)
 	return segs
 end
 
-local function split_pages(words)
+-- Etichetta "Nome:" all'inizio della bolla (come SPEAKER in extractScript.py: nome senza spazi, max 24 caratteri)
+local function page_label(text)
+	local name = text:match("^([^%s:<>]+):")
+	if name and utf8.len(name) and utf8.len(name) <= 24 then
+		return name
+	end
+	return nil
+end
+
+local function split_pages(words, speaker)
 	local result, cur = {}, {}
 
 	local function flush()
@@ -350,11 +402,14 @@ local function split_pages(words)
 			cur[#cur] = nil
 		end
 		if #cur > 0 then
+			local text = decode(cur)
+			speaker = page_label(text) or speaker   -- senza etichetta parla ancora chi parlava prima
 			result[#result + 1] = {
-				hash  = hash_words(cur),
-				text  = decode(cur),
-				words = cur,
-				segs = count_segments(cur),
+				hash    = hash_words(cur),
+				text    = text,
+				words   = cur,
+				segs    = count_segments(cur),
+				speaker = speaker,
 			}
 		end
 		cur = {}
@@ -440,7 +495,7 @@ end
 
 local function play_page(page)
 	stop_audio()
-	local path = hashToPath[page.audioHash]
+	local path = path_for(page.audioHash, page.speaker)
 	if not path then
 		log_miss(page.hash, page.text)
 		return
@@ -472,7 +527,8 @@ local function start_page(idx)
 	p.audioHash = p.audioHash or resolve_hash(p)
 	if DEBUG then
 		local via = (p.audioHash ~= p.hash) and (" (trovata come " .. p.audioHash .. ")") or ""
-		console.log(string.format("  Pagina %d/%d -> %s%s = %s", idx, #pages, p.hash, via, hashToPath[p.audioHash] or "NESSUN FILE"))
+		console.log(string.format("  Pagina %d/%d [%s] -> %s%s = %s", idx, #pages, p.speaker or "?", p.hash, via,
+			path_for(p.audioHash, p.speaker) or "NESSUN FILE"))
 	end
 	play_page(p)
 end
@@ -528,7 +584,7 @@ end
 local function begin_dialog(words, h, src)
 	reset_dialog()
 	currentHash, currentSrc = h, src
-	pages = split_pages(words)
+	pages = split_pages(words, SOURCE_SPEAKER[src])
 	if DEBUG then
 		local from = (src == "main") and "" or string.format(" [buffer %06X]", src)
 		console.log("Dialogo " .. h .. from .. " (" .. #pages .. " pagine) " .. decode(words))
