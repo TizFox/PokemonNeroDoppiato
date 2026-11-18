@@ -16,7 +16,6 @@ Il pacchetto contiene l'emulatore [BizHawk](https://github.com/TASEmulators/BizH
 - [Installazione](#installazione)
 - [Come si gioca](#come-si-gioca)
 - [Domande frequenti e problemi](#domande-frequenti-e-problemi)
-- [Personaggi doppiati](#personaggi-doppiati)
 - [Crediti](#crediti)
 - [Avviso legale](#avviso-legale)
 
@@ -91,7 +90,7 @@ Se aggiorni il pacchetto a una nuova versione, **copia quella cartella** nella n
 
 **Il gioco parte ma non sento nessuna voce.**
 Apri la *Lua Console* e controlla che ci sia la scritta `Pokemon Nero Doppiato avviato`. Se ci sono righe con `ERRORE`, apri una [segnalazione](../../issues) e allega il testo.
-Ricorda che non tutti i dialoghi sono già doppiati: vedi [Personaggi doppiati](#personaggi-doppiati).
+Ricorda che non tutti i dialoghi sono già doppiati: vedi [Crediti](#crediti).
 
 **BizHawk dice che non trova la ROM.**
 Controlla che il file sia in `ROM/` e si chiami esattamente `PokemonNero.nds`.
@@ -105,69 +104,37 @@ No. Le voci sono collegate al testo della versione italiana di *Pokémon Version
 **Posso usare un altro emulatore?**
 No. Lo script funziona solo con BizHawk.
 
----
-
-## Personaggi doppiati
-
-| Personaggio | Stato |
-|---|---|
-| Prof Aralia | 🟡 in corso |
-| Komor | 🟡 in corso |
-| Belle | 🟡 in corso |
-| Mamma | 🟡 in corso |
-| Ghechis | 🟡 in corso |
-| N | 🟡 in corso |
-| Spighetto (Capopalestra) | 🟡 in corso |
-| Chicco (Capopalestra) | 🟡 in corso |
-| Maisello (Capopalestra) | 🟡 in corso |
-| Aloè (Capopalestra) | 🟡 in corso |
-| Artemisio (Capopalestra) | 🟡 in corso |
-| Camelia (Capopalestra) | 🟡 in corso |
-| Rafan (Capopalestra) | 🟡 in corso |
-| Anemone (Capopalestra) | 🟡 in corso |
-| Silvstro (Capopalestra) | 🟡 in corso |
-| Iris (Capopalestra) | 🟡 in corso |
-| Aristide (Capopalestra) | 🟡 in corso |
-| Antemia (Super Quattro) | 🟡 in corso |
-| Mirton (Super Quattro) | 🟡 in corso |
-| Catlina (Super Quattro) | 🟡 in corso |
-| Marzio (Super Quattro) | 🟡 in corso |
-| Nardo | 🟡 in corso |
-| Camilla | 🟡 in corso |
-
-🟢 completo · 🟡 in corso · ⚪ da fare
-
----
-
 ## Crediti
 
 ### Doppiatori
 
-| Personaggio | Voce |
+| Personaggio | Voce | Stato |
 |---|---|
-| Prof Aralia | *Nome Cognome* |
-| Komor | *Nome Cognome* |
-| Belle | *Nome Cognome* |
-| Mamma | *Nome Cognome* |
-| Ghechis | *Nome Cognome* |
-| N | *Nome Cognome* |
-| Spighetto (Capopalestra) | *Nome Cognome* |
-| Chicco (Capopalestra) | *Nome Cognome* |
-| Maisello (Capopalestra) | *Nome Cognome* |
-| Aloè (Capopalestra) | *Nome Cognome* |
-| Artemisio (Capopalestra) | *Nome Cognome* |
-| Camelia (Capopalestra) | *Nome Cognome* |
-| Rafan (Capopalestra) | *Nome Cognome* |
-| Anemone (Capopalestra) | *Nome Cognome* |
-| Silvstro (Capopalestra) | *Nome Cognome* |
-| Iris (Capopalestra) | *Nome Cognome* |
-| Aristide (Capopalestra) | *Nome Cognome* |
-| Antemia (Super Quattro) | *Nome Cognome* |
-| Mirton (Super Quattro) | *Nome Cognome* |
-| Catlina (Super Quattro) | *Nome Cognome* |
-| Marzio (Super Quattro) | *Nome Cognome* |
-| Nardo | *Nome Cognome* |
-| Camilla | *Nome Cognome* |
+| Prof. Aralia | *Nome Cognome* | 🟡 in corso |
+| Komor | *Nome Cognome* | 🟡 in corso |
+| Belle | *Nome Cognome* | 🟡 in corso |
+| Mamma | *Nome Cognome* | 🟡 in corso |
+| Ghechis | *Nome Cognome* | 🟡 in corso |
+| N | *Nome Cognome* | 🟡 in corso |
+| Spighetto (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Chicco (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Maisello (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Aloè (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Artemisio (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Camelia (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Rafan (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Anemone (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Silvstro (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Iris (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Aristide (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Antemia (Super Quattro) | *Nome Cognome* | ⚪ da fare |
+| Mirton (Super Quattro) | *Nome Cognome* | ⚪ da fare |
+| Catlina (Super Quattro) | *Nome Cognome* | ⚪ da fare |
+| Marzio (Super Quattro) | *Nome Cognome* | ⚪ da fare |
+| Nardo | *Nome Cognome* | ⚪ da fare |
+| Camilla | *Nome Cognome* | ⚪ da fare |
+
+🟢 completo · 🟡 in corso · ⚪ da fare
 
 ### Programmazione
 
