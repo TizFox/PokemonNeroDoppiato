@@ -109,7 +109,7 @@ No. Lo script funziona solo con BizHawk.
 ### Doppiatori
 
 | Personaggio | Voce | Stato |
-|---|---|
+|---|---|---|
 | Prof. Aralia | *Nome Cognome* | 🟡 in corso |
 | Komor | *Nome Cognome* | 🟡 in corso |
 | Belle | *Nome Cognome* | 🟡 in corso |
@@ -139,7 +139,7 @@ No. Lo script funziona solo con BizHawk.
 ### Programmazione
 
 - **Tiziano Bonaccorsi** ([@TizFox](https://github.com/TizFox)) – script Lua, strumenti di estrazione, ricerca in memoria
-- **Giosué** ([@gios](https://github.com/TizFox)) – organizzazione e formattazione del copione
+- **Gios** ([@gios](https://github.com/TizFox)) – organizzazione e formattazione del copione
 
 ### Software di terze parti
 
