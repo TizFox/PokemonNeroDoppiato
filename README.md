@@ -138,8 +138,8 @@ No. Lo script funziona solo con BizHawk.
 
 ### Programmazione
 
-- **Tiziano Bonaccorsi** ([@TizFox](https://github.com/TizFox)) – script Lua, strumenti di estrazione, ricerca in memoria
-- **Gios** ([@gios](https://github.com/TizFox)) – organizzazione e formattazione del copione
+- **Tiziano Bonaccorsi** ([@TizFox](https://github.com/TizFox)) – script Lua, strumenti di estrazione, ricerca in memoria e gestione audio
+- **Gios** ([@gios](https://github.com/TizFox)) – organizzazione, strumenti di estrazione e formattazione del copione
 
 ### Software di terze parti
 
