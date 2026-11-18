@@ -114,24 +114,24 @@ No. Lo script funziona solo con BizHawk.
 | Komor | *Nome Cognome* | 🟡 in corso |
 | Belle | *Nome Cognome* | 🟡 in corso |
 | Mamma | *Nome Cognome* | 🟡 in corso |
-| Ghechis | *Nome Cognome* | 🟡 in corso |
+| Ghecis | *Nome Cognome* | 🟡 in corso |
 | N | *Nome Cognome* | 🟡 in corso |
 | Spighetto (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Chicco (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Maisello (Capopalestra) | *Nome Cognome* | ⚪ da fare |
-| Aloè (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Aloé (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Artemisio (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Camelia (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Rafan (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Anemone (Capopalestra) | *Nome Cognome* | ⚪ da fare |
-| Silvstro (Capopalestra) | *Nome Cognome* | ⚪ da fare |
-| Iris (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Silvestro (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Aristide (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Antemia (Super Quattro) | *Nome Cognome* | ⚪ da fare |
 | Mirton (Super Quattro) | *Nome Cognome* | ⚪ da fare |
 | Catlina (Super Quattro) | *Nome Cognome* | ⚪ da fare |
 | Marzio (Super Quattro) | *Nome Cognome* | ⚪ da fare |
 | Nardo | *Nome Cognome* | ⚪ da fare |
+| Iris | *Nome Cognome* | ⚪ da fare |
 | Camilla | *Nome Cognome* | ⚪ da fare |
 
 🟢 completo · 🟡 in corso · ⚪ da fare
