@@ -110,11 +110,11 @@ No. Lo script funziona solo con BizHawk.
 
 | Personaggio | Voce | Stato |
 |---|---|---|
-| Prof. Aralia | *Nome Cognome* | 🟡 in corso |
-| Komor | *Nome Cognome* | 🟡 in corso |
-| Belle | *Nome Cognome* | 🟡 in corso |
-| Mamma | *Nome Cognome* | 🟡 in corso |
-| Ghecis | *Nome Cognome* | 🟡 in corso |
+| Prof. Aralia | *Nome Cognome* | ⚪ da fare |
+| Komor | *Nome Cognome* | ⚪ da fare |
+| Belle | *Nome Cognome* | ⚪ da fare |
+| Mamma | *Nome Cognome* | ⚪ da fare |
+| Ghecis | *Nome Cognome* | ⚪ da fare |
 | N | *Nome Cognome* | 🟡 in corso |
 | Spighetto (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Chicco (Capopalestra) | *Nome Cognome* | ⚪ da fare |
@@ -122,7 +122,7 @@ No. Lo script funziona solo con BizHawk.
 | Aloé (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Artemisio (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Camelia (Capopalestra) | *Nome Cognome* | ⚪ da fare |
-| Rafan (Capopalestra) | *Nome Cognome* | ⚪ da fare |
+| Rafan (Capopalestra) | *Nome Cognome* | 🟡 in corso |
 | Anemone (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Silvestro (Capopalestra) | *Nome Cognome* | ⚪ da fare |
 | Aristide (Capopalestra) | *Nome Cognome* | ⚪ da fare |
@@ -132,6 +132,7 @@ No. Lo script funziona solo con BizHawk.
 | Marzio (Super Quattro) | *Nome Cognome* | ⚪ da fare |
 | Nardo | *Nome Cognome* | ⚪ da fare |
 | Iris | *Nome Cognome* | ⚪ da fare |
+| Bellocchio | *Nome Cognome* | ⚪ da fare |
 | Camilla | *Nome Cognome* | ⚪ da fare |
 
 🟢 completo · 🟡 in corso · ⚪ da fare
