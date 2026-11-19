@@ -4,10 +4,12 @@ Progetto amatoriale che aggiunge il **doppiaggio in italiano** a *Pokémon Versi
 
 Il pacchetto contiene l'emulatore [BizHawk](https://github.com/TASEmulators/BizHawk), uno script Lua e le registrazioni delle voci. Mentre giochi, lo script riconosce il dialogo a schermo e riproduce la voce del personaggio, bolla per bolla.
 
-> ⚠️ **La ROM del gioco NON è inclusa.** Per giocare ti serve una copia di *Pokémon Versione Nera* che possiedi legalmente.
+> ⚠️ **La ROM del gioco NON è inclusa.** Per giocare ti serve una copia di *Pokémon Versione Nera* posseduta legalmente.
 
 <!-- Inserire qui uno screenshot o una GIF del gioco con il doppiaggio (fatta da voi, senza loghi ufficiali) -->
 
+---
+---
 ---
 
 ## Indice
@@ -20,6 +22,8 @@ Il pacchetto contiene l'emulatore [BizHawk](https://github.com/TASEmulators/BizH
 - [Avviso legale](#avviso-legale)
 
 ---
+---
+---
 
 ## Requisiti
 
@@ -29,18 +33,20 @@ Il pacchetto contiene l'emulatore [BizHawk](https://github.com/TASEmulators/BizH
   Le voci sono collegate al testo italiano del gioco: con altre lingue o con *Versione Bianca* non funzionano.
 
 ---
+---
+---
 
 ## Installazione
 
 ### 1. Scarica il pacchetto
 
-Vai nella sezione [**Releases**](../../releases) di questa pagina e scarica l'ultimo file `PokemonNeroDoppiato_vX.Y.zip`.
+Vai nella sezione [**Releases**](../../releases) (WIP) di questa pagina e scarica l'ultimo file `PokemonNeroDoppiato_vX.Y.zip`.
 
 Estrai lo zip in una cartella a tua scelta, per esempio `C:\Giochi\PokemonNeroDoppiato`.
 
 > Evita cartelle protette come `C:\Program Files`: BizHawk deve poter scrivere i salvataggi nella sua cartella.
 
-Dopo l'estrazione dovresti avere:
+Nello zip sono contenuti:
 
 ```
 PokemonNeroDoppiato/
@@ -58,7 +64,7 @@ Copia la tua ROM di *Pokémon Versione Nera* nella cartella `ROM/` e **rinominal
 ROM/PokemonNero.nds
 ```
 
-> Il nome deve essere esattamente `PokemonNero.nds`. Se Windows nasconde le estensioni dei file, attento a non ottenere `PokemonNero.nds.nds`.
+> Il nome deve essere esattamente `PokemonNero.nds`. Se Windows nasconde le estensioni dei file, attenzione a non ottenere `PokemonNero.nds.nds`.
 
 ### 3. Avvia il gioco
 
@@ -69,10 +75,12 @@ Si apre BizHawk con il gioco e lo script del doppiaggio già attivo. Si apre anc
 > Al primo avvio Windows potrebbe mostrare l'avviso *"Windows ha protetto il PC"*. Clicca su **Ulteriori informazioni → Esegui comunque**.
 
 ---
+---
+---
 
 ## Come si gioca
 
-- Il gioco funziona come l'originale. Le voci partono da sole quando compare un dialogo doppiato.
+- Il gioco funziona come l'originale. Le voci partono automaticamente quando compare un dialogo doppiato.
 - Premi **A** o **B** per passare alla bolla successiva: la voce di quella bolla parte e la precedente si interrompe.
 - Se salti un dialogo, l'audio si ferma.
 - I comandi della tastiera si cambiano in BizHawk da **Config → Controllers**.
@@ -85,24 +93,24 @@ Il gioco salva normalmente con il menu **Salva**. I file di salvataggio stanno n
 Se aggiorni il pacchetto a una nuova versione, **copia quella cartella** nella nuova installazione per non perdere i progressi.
 
 ---
+---
+---
 
 ## Domande frequenti e problemi
 
-**Il gioco parte ma non sento nessuna voce.**
-Apri la *Lua Console* e controlla che ci sia la scritta `Pokemon Nero Doppiato avviato`. Se ci sono righe con `ERRORE`, apri una [segnalazione](../../issues) e allega il testo.
-Ricorda che non tutti i dialoghi sono già doppiati: vedi [Crediti](#crediti).
+**Il gioco parte ma non sento nessuna voce.**<br>Apri la *Lua Console* e controlla che ci sia una scritta del tipo: `Pokemon Nero Doppiato avviato`. Se ci sono righe con `ERRORE`, apri una [segnalazione](../../issues) e allega il testo e volendo un'immagine del gioco.<br>Non tutti i dialoghi sono già doppiati: vedi [Crediti](#crediti).
 
-**BizHawk dice che non trova la ROM.**
-Controlla che il file sia in `ROM/` e si chiami esattamente `PokemonNero.nds`.
+**BizHawk dice che non trova la ROM.**<br>Controlla che il file sia in `ROM/` e si chiami esattamente `PokemonNero.nds`.
 
-**Alcune voci partono e altre no nello stesso dialogo.**
-È normale: il doppiaggio è in corso e alcune battute non sono ancora state registrate.
+**Alcune voci partono e altre no nello stesso dialogo.**<br>È normale: il doppiaggio è in corso e alcune battute non sono ancora state registrate. Oppure quel personaggio non è tra quelli doppiati.
 
-**Funziona con la ROM inglese / con Versione Bianca / con Nero 2?**
-No. Le voci sono collegate al testo della versione italiana di *Pokémon Versione Nera*.
+**Funziona con la ROM inglese / con Versione Bianca / con Nero 2?**<br>Potrebbe funzionare ma non è consigliato. Lo script è calibrato unicamente per la versione italiana di *Pokémon Versione Nera*.
 
-**Posso usare un altro emulatore?**
-No. Lo script funziona solo con BizHawk.
+**Posso usare un altro emulatore?**<br>No. Lo script usa le funzionalità offerte da BizHawk per rilevare e riprodurre i dialoghi.
+
+---
+---
+---
 
 ## Crediti
 
@@ -139,13 +147,15 @@ No. Lo script funziona solo con BizHawk.
 
 ### Programmazione
 
-- **Tiziano Bonaccorsi** ([@TizFox](https://github.com/TizFox)) – script Lua, strumenti di estrazione, ricerca in memoria e gestione audio
-- **Gios** ([@gios](https://github.com/TizFox)) – organizzazione, strumenti di estrazione e formattazione del copione
+- **Tiziano Bonaccorsi** ([@TizFox](https://github.com/TizFox)) - script Lua, strumenti di estrazione, ricerca in memoria, analisi del sistema dei dialoghi e gestione/equalizzazione audio,
+- **Giosuè Di Fatta** ([@gioshish7](https://github.com/gioshish7)) - coordinamento, estrazione del copione e analisi del sistema dei dialoghi.
 
 ### Software di terze parti
 
-- [BizHawk](https://github.com/TASEmulators/BizHawk) – emulatore multi-sistema, distribuito con licenza MIT (vedi `BizHawk/LICENSE`).
+- [BizHawk](https://github.com/TASEmulators/BizHawk) - emulatore multi-sistema, distribuito con licenza MIT (vedi `BizHawk/LICENSE`).
 
+---
+---
 ---
 
 ## Avviso legale
@@ -155,6 +165,5 @@ Questo è un **progetto amatoriale, gratuito e non commerciale**, realizzato da 
 - **Non è affiliato** a Nintendo, The Pokémon Company, Game Freak o Creatures Inc., né approvato da loro.
 - *Pokémon* e tutti i nomi correlati sono marchi dei rispettivi proprietari.
 - Il pacchetto **non contiene la ROM** né altri file del gioco. Per giocare è necessaria una copia del gioco posseduta legalmente.
-- Il progetto non accetta donazioni e non ha scopo di lucro.
 
 Se sei titolare di diritti e ritieni che questo progetto violi i tuoi diritti, contattaci tramite le [Issues](../../issues) e provvederemo a rimuovere i contenuti.
