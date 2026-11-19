@@ -53,7 +53,7 @@ PokemonNeroDoppiato/
 ├── PokemonNeroDoppiato.bat   ← avvia il gioco
 ├── BizHawk/                  ← emulatore
 ├── ROM/                      ← qui va la tua ROM
-└── scripts/                  ← script e voci (non modificare)
+└── src/                      ← script e voci (non modificare)
 ```
 
 ### 2. Inserisci la tua ROM
